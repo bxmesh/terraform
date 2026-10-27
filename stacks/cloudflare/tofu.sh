@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
-# Runs OpenTofu for this repo from the owner's laptop, with the state's key pair and passphrase read
-# from the macOS keychain for this one process: never printed, never written to disk. Applies run
-# in CI; this is for reading the state (to-openbao.sh) and for a local plan.
-#   ./tofu.sh init | plan | output ...
-# A local plan also needs Cloudflare credentials in the environment (CLOUDFLARE_API_TOKEN, or
-# CLOUDFLARE_EMAIL and CLOUDFLARE_API_KEY).
+# Runs OpenTofu for this repo from the owner's laptop, the only place it's applied from (O169).
+# The state's key pair and passphrase are read from the macOS keychain for this one process:
+# never printed, never written to disk. Cloudflare's credentials come from your shell
+# (CLOUDFLARE_EMAIL and CLOUDFLARE_API_KEY, as for cluster-terraform's cloudflare stack, O168).
+#   ./tofu.sh init | plan | apply | output ...
 set -euo pipefail
 cd "$(dirname "$0")"
 

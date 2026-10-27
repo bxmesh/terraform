@@ -1,5 +1,5 @@
 variable "state_passphrase" {
-  description = "Encrypts this repo's state and plans. A GitHub environment secret in CI; the owner's keychain through tofu.sh."
+  description = "Encrypts this repo's state and plans. From the owner's keychain, through tofu.sh."
   type        = string
   sensitive   = true
 

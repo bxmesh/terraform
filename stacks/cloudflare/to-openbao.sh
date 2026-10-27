@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Moves the two credentials this repo makes into OpenBao, once, after the first apply: straight
+# Moves the tunnel's token into OpenBao, once, after the first apply: straight
 # from the encrypted state into OpenBao through cluster-terraform's bao.sh, never printed and never
 # written to disk (O57). Stops before writing anything empty.
 #   ./to-openbao.sh [path to cluster-terraform's stacks/openbao/bao.sh]
@@ -15,5 +15,4 @@ move() { # <output> <OpenBao path> <key>
   echo "$1 -> $2 ($3)"
 }
 
-move tunnel_token       secret/dmz-bxmesh-cloudflared/tunnel token
-move external_dns_token secret/platform-external-dns/bxmesh  token
+move tunnel_token secret/dmz-bxmesh-cloudflared/tunnel token

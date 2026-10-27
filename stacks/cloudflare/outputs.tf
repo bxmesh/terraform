@@ -26,9 +26,3 @@ output "tunnel_token" {
   value       = data.cloudflare_zero_trust_tunnel_cloudflared_token.bxmesh.token
   sensitive   = true
 }
-
-output "external_dns_token" {
-  description = "external-dns's token for bxmesh.net: OpenBao secret/platform-external-dns/bxmesh, key token."
-  value       = cloudflare_account_token.external_dns.value
-  sensitive   = true
-}

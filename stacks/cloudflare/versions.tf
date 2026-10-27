@@ -10,8 +10,7 @@ terraform {
 
   # State in its own R2 bucket in the owner's account (O80), locked with OpenTofu's lockfile, which
   # needs R2's conditional writes (T24). The bucket is made by hand before the first apply (O30).
-  # Its key pair comes from the environment: GitHub's environment secrets in CI, the keychain on
-  # the owner's laptop (tofu.sh).
+  # Its key pair comes from the owner's keychain, through tofu.sh (O169).
   backend "s3" {
     bucket = "bxmesh-tofu-state"
     key    = "terraform.tfstate"
@@ -48,6 +47,6 @@ terraform {
   }
 }
 
-# Signs in with CLOUDFLARE_API_TOKEN from the environment: the apply token in CI's `main`
-# environment, the read-only one in `plan`.
+# Signs in with the owner's credentials from the shell (CLOUDFLARE_EMAIL and CLOUDFLARE_API_KEY,
+# O168). Applied only from the owner's laptop, never from CI (O169).
 provider "cloudflare" {}
