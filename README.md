@@ -9,13 +9,13 @@ from the app's own route (K23).
 
 | File | What it is |
 | --- | --- |
-| `tunnel.tf` | BxMesh's own tunnel, remotely managed: `bxmesh.net` and `*.bxmesh.net` go to BxMesh's gateway in cluster-02, anything else gets a 404 (O59, O73, A23) |
-| `access.tf` | Access, owner only by a one-time code, as on cluster-01: `bxmesh.net/admin`, the observers' approvals (O126), and `mqtt-admin.bxmesh.net`, the broker's dashboard (O123), taken over from cluster-01 |
-| `email.tf` | bxmesh.net's MX to Google Workspace (O60) |
-| `external-dns.tf` | The token for cluster-02's external-dns for bxmesh.net: Zone Read and DNS Write on bxmesh.net only (K23) |
-| `outputs.tf` | The tunnel's ID and CNAME target, the Access audiences, and the two tokens (sensitive) |
-| `tofu.sh` | OpenTofu from the owner's laptop, its state credentials from the keychain |
-| `to-openbao.sh` | Moves the two tokens from the state straight into OpenBao, once |
+| `stacks/cloudflare/tunnel.tf` | BxMesh's own tunnel, remotely managed: `bxmesh.net` and `*.bxmesh.net` go to BxMesh's gateway in cluster-02, anything else gets a 404 (O59, O73, A23) |
+| `stacks/cloudflare/access.tf` | Access, owner only by a one-time code, as on cluster-01: `bxmesh.net/admin`, the observers' approvals (O126), and `mqtt-admin.bxmesh.net`, the broker's dashboard (O123), taken over from cluster-01 |
+| `stacks/cloudflare/email.tf` | bxmesh.net's MX to Google Workspace (O60) |
+| `stacks/cloudflare/external-dns.tf` | The token for cluster-02's external-dns for bxmesh.net: Zone Read and DNS Write on bxmesh.net only (K23) |
+| `stacks/cloudflare/outputs.tf` | The tunnel's ID and CNAME target, the Access audiences, and the two tokens (sensitive) |
+| `stacks/cloudflare/tofu.sh` | OpenTofu from the owner's laptop, its state credentials from the keychain |
+| `stacks/cloudflare/to-openbao.sh` | Moves the two tokens from the state straight into OpenBao, once |
 | `.github/workflows/tofu.yml` | Plan on a pull request, apply on `main` (O80) |
 
 ## State
@@ -84,6 +84,7 @@ Move the two tokens into OpenBao, straight from the state, never printed (O57), 
 cluster-terraform's `bao.sh` (it defaults to `~/repositories/zindello/cluster-terraform`):
 
 ```sh
+cd stacks/cloudflare
 ./tofu.sh init
 ./to-openbao.sh [path to cluster-terraform/stacks/openbao/bao.sh]
 ```
@@ -93,6 +94,6 @@ cluster-terraform's `bao.sh` (it defaults to `~/repositories/zindello/cluster-te
 | `tunnel_token` | `secret/dmz-bxmesh-cloudflared/tunnel`, key `token` (cloudflared, O80) |
 | `external_dns_token` | `secret/platform-external-dns/bxmesh`, key `token` (external-dns, K23) |
 
-The rest aren't secrets: `./tofu.sh output` shows them. `admin_access_aud` is the observers app's
+The rest aren't secrets: `./tofu.sh output` (in `stacks/cloudflare`) shows them. `admin_access_aud` is the observers app's
 `ACCESS_AUD` (its `ACCESS_TEAM` is `zindello.cloudflareaccess.com`), and `tunnel_cname` is the
 target external-dns writes for bxmesh.net.

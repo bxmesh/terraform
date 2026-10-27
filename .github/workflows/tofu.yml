@@ -12,6 +12,11 @@ on:
 permissions:
   contents: read
 
+# The zone's config is one stack, in stacks/cloudflare.
+defaults:
+  run:
+    working-directory: stacks/cloudflare
+
 env:
   TOFU_VERSION: 1.13.2
 
