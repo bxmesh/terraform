@@ -1,0 +1,33 @@
+# Checks only: formatting and validity, with no secrets and no access to Cloudflare or the state.
+# Applies run from the owner's laptop (stacks/cloudflare/tofu.sh) until cluster-02's own runners
+# exist (O169).
+name: tofu
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: stacks/cloudflare
+
+env:
+  TOFU_VERSION: 1.13.2
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - uses: opentofu/setup-opentofu@a1320f892987e89d278cc92dc5adc984fb93aca4  # v2.0.2
+        with:
+          tofu_version: ${{ env.TOFU_VERSION }}
+          tofu_wrapper: false
+      - run: tofu fmt -check -recursive
+      - run: tofu init -backend=false -input=false
+      - run: tofu validate
