@@ -1,8 +1,8 @@
 # terraform
 
-The bxmesh.net zone's base config: MX to Google, its tunnel, Access apps, and the token cluster-02's
-external-dns uses for bxmesh.net (K23); its own R2 state; applied from the owner's laptop, checked
-by CI (O59, O60, O80, O128, O169). The design, the layout and the rules are in
+The bxmesh.net zone's base config: MX to Google, its tunnel, Access apps, the observers' Turnstile
+widget, and the token cluster-02's external-dns uses for bxmesh.net (K23); its own R2 state; applied
+from the owner's laptop, checked by CI (O59, O60, O80, O128, O169). The design, the layout and the rules are in
 [`zindello-cluster/cluster-docs`](https://github.com/zindello-cluster/cluster-docs).
 
 The names of BxMesh's sites aren't here: cluster-02's external-dns for bxmesh.net writes each one
@@ -13,6 +13,7 @@ from the app's own route (K23).
 | `stacks/cloudflare/tunnel.tf` | BxMesh's own tunnel, remotely managed: `bxmesh.net` and `*.bxmesh.net` go to BxMesh's gateway in cluster-02, anything else gets a 404 (O59, O73, A23) |
 | `stacks/cloudflare/access.tf` | Access, owner only by a one-time code, as on cluster-01: `bxmesh.net/admin`, the observers' approvals (O126), and `mqtt-admin.bxmesh.net`, the broker's dashboard (O123), taken over from cluster-01 |
 | `stacks/cloudflare/external-dns.tf` | cluster-02's external-dns token for bxmesh.net: Zone Read and DNS Edit on bxmesh.net only (K23) |
+| `stacks/cloudflare/turnstile.tf` | The Turnstile widget on the observers' form, `bxmesh.net/join`, taken over from cluster-01, with `bxmesh.net` as its hostname |
 | `stacks/cloudflare/email.tf` | bxmesh.net's MX to Google Workspace (O60) |
 | `stacks/cloudflare/outputs.tf` | The tunnel's ID and CNAME target, the Access audiences, the tunnel's token and external-dns's token (both sensitive) |
 | `stacks/cloudflare/tofu.sh` | OpenTofu from the owner's laptop, its state credentials from the keychain |
