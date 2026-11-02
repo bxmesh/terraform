@@ -1,5 +1,21 @@
-# Cloudflare Access in front of BxMesh's admin pages: only the owner gets in, by a one-time code
-# sent to them, as on cluster-01 today. Each app exists before its hostname's DNS does.
+# Cloudflare Access in front of BxMesh's admin pages: only the owner gets in. The observers'
+# approvals sign in with Google (the owner, 2 November 2026); the broker's dashboard still by a
+# one-time code sent to them, as on cluster-01. Each app exists before its hostname's DNS does.
+
+# The account's Google login method, found by type, read and not owned: the owner added it in the
+# Zero Trust dashboard with their own OAuth client (as cluster-02's Argo CD uses), so its secret
+# never enters this stack's state. Cloudflare's "google" (any Google account) or "google-apps"
+# (Google Workspace); exactly one must exist.
+data "cloudflare_zero_trust_access_identity_providers" "all" {
+  account_id = local.account_id
+}
+
+locals {
+  google_idp = one([
+    for p in data.cloudflare_zero_trust_access_identity_providers.all.result : p.id
+    if contains(["google", "google-apps"], p.type)
+  ])
+}
 
 resource "cloudflare_zero_trust_access_policy" "owner" {
   account_id = local.account_id
@@ -17,9 +33,16 @@ resource "cloudflare_zero_trust_access_application" "admin" {
   domain                    = "${local.zone}/admin"
   destinations              = [{ type = "public", uri = "${local.zone}/admin" }]
   session_duration          = "24h"
-  allowed_idps              = [local.one_time_pin_idp]
+  allowed_idps              = [local.google_idp]
   auto_redirect_to_identity = true
   policies                  = [{ id = cloudflare_zero_trust_access_policy.owner.id, precedence = 1 }]
+
+  lifecycle {
+    precondition {
+      condition     = local.google_idp != null
+      error_message = "No Google login method on the account: add it in Zero Trust (Settings, Authentication, Login methods) first."
+    }
+  }
 }
 
 # The broker's dashboard (O123). cluster-01 made this app; it's taken over here, not made again.

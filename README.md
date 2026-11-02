@@ -11,7 +11,7 @@ from the app's own route (K23).
 | File | What it is |
 | --- | --- |
 | `stacks/cloudflare/tunnel.tf` | BxMesh's own tunnel, remotely managed: `bxmesh.net` and `*.bxmesh.net` go to BxMesh's gateway in cluster-02, anything else gets a 404 (O59, O73, A23) |
-| `stacks/cloudflare/access.tf` | Access, owner only by a one-time code, as on cluster-01: `bxmesh.net/admin`, the observers' approvals (O126), and `mqtt-admin.bxmesh.net`, the broker's dashboard (O123), taken over from cluster-01 |
+| `stacks/cloudflare/access.tf` | Access, owner only: `bxmesh.net/admin`, the observers' approvals (O126), by Google sign-in (from 2 November 2026), and `mqtt-admin.bxmesh.net`, the broker's dashboard (O123), taken over from cluster-01, by a one-time code |
 | `stacks/cloudflare/external-dns.tf` | cluster-02's external-dns token for bxmesh.net: Zone Read and DNS Edit on bxmesh.net only (K23) |
 | `stacks/cloudflare/turnstile.tf` | The Turnstile widget on the observers' form, `bxmesh.net/join`, taken over from cluster-01, with `bxmesh.net` as its hostname |
 | `stacks/cloudflare/email.tf` | bxmesh.net's MX to Google Workspace (O60) |
