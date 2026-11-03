@@ -1,0 +1,34 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Renovate opens a pull request for each new release of anything pinned here, which the owner merges (R5). The shared preset applies (zindello-cluster/cluster-platform: renovate/preset.json); this file holds only what's particular to this repo.",
+  "customManagers": [
+    {
+      "description": "OpenTofu's version in the workflow, kept with required_version.",
+      "customType": "regex",
+      "managerFilePatterns": ["/^\\.github/workflows/[^/]+\\.ya?ml$/"],
+      "matchStrings": ["\\bTOFU_VERSION:\\s*\"?(?<currentValue>\\d+\\.\\d+\\.\\d+)\"?"],
+      "depNameTemplate": "opentofu",
+      "packageNameTemplate": "opentofu/opentofu",
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v(?<version>.*)$"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "OpenTofu, not Terraform: providers and modules from OpenTofu's registry, and required_version is OpenTofu's own version.",
+      "matchDatasources": ["terraform-provider", "terraform-module"],
+      "registryUrls": ["https://registry.opentofu.org"]
+    },
+    {
+      "matchManagers": ["terraform"],
+      "matchDepTypes": ["required_version"],
+      "overrideDepName": "opentofu",
+      "overridePackageName": "opentofu/opentofu"
+    },
+    {
+      "description": "OpenTofu's version, in versions.tf and the workflow, in one pull request.",
+      "matchDepNames": ["opentofu"],
+      "groupName": "OpenTofu"
+    }
+  ]
+}
