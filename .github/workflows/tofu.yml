@@ -17,7 +17,7 @@ defaults:
     working-directory: stacks/cloudflare
 
 env:
-  TOFU_VERSION: 1.13.2
+  TOFU_VERSION: 1.13.9
 
 jobs:
   check:
