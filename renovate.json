@@ -20,10 +20,11 @@
       "registryUrls": ["https://registry.opentofu.org"]
     },
     {
+      "description": "required_version is OpenTofu's version, which the Terraform manager reads as hashicorp/terraform: looked up in opentofu/opentofu's releases instead. Only the package is renamed, not the dependency: renamed, Renovate re-read versions.tf after the change, found hashicorp/terraform rather than the new name, and failed every update ('update failure', cluster-02's review of 26 November 2026, B2).",
       "matchManagers": ["terraform"],
       "matchDepTypes": ["required_version"],
-      "overrideDepName": "opentofu",
-      "overridePackageName": "opentofu/opentofu"
+      "overridePackageName": "opentofu/opentofu",
+      "groupName": "OpenTofu"
     },
     {
       "description": "OpenTofu's version, in versions.tf and the workflow, in one pull request.",
